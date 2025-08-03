@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stock Exchange</title>
+    <script type="module" src="view.js"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <button id="start-button">Start</button>
+    <div id="search-container" style="display: none">
+      <label for="search-input">Enter query</label>
+      <input type="text" id="search-input" placeholder="Your query here..." />
+      <button id="search-button">Search</button>
+      <p id="loading" style="display: none">Loading...</p>
+      <ul id="search-results"></ul>
+    </div>
+  </body>
+</html>
