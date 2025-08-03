@@ -1,7 +1,7 @@
 import * as makeUrl from "../utils/makeUrl.js";
 import getData from "../utils/getData.js";
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   const urlParams = new URLSearchParams(window.location.search);
 
   let symbol;
@@ -13,15 +13,21 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!symbol) throw new Error("no symbol");
 
   document.title = `${symbol} Company Page`;
-
+  const loadingCompanyData = document.getElementById("loading-company-data");
+  loadingCompanyData.style.display = "initial";
   const url = makeUrl.companyUrl(symbol);
-  getData(url).then((data) => {
-    render(data[0]);
-    const history = makeUrl.historyUrl(symbol);
-    getData(history).then((historicalData) => {
-      renderHistoricalData(historicalData);
-    });
-  });
+  const data = await getData(url);
+  loadingCompanyData.style.display = "none";
+  render(data[0]);
+
+  const loadingHistoricalData = document.getElementById(
+    "loading-historical-data"
+  );
+  loadingHistoricalData.style.display = "initial";
+  const history = makeUrl.historyUrl(symbol);
+  const historicalData = await getData(history);
+  loadingHistoricalData.style.display = "none";
+  renderHistoricalData(historicalData);
 });
 
 const render = (data) => {
