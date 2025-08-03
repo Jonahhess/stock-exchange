@@ -45,10 +45,23 @@ document.addEventListener("DOMContentLoaded", () => {
     );
     const companies = await Promise.all(promises);
     render(companies);
+    highlight(query);
 
     searchInput.value = "";
   });
 });
+
+function highlight(query) {
+  const companies = document.getElementsByClassName("company");
+  const escapedPattern = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const re = new RegExp(escapedPattern, "gi");
+  companies.forEach((company) => {
+    company.innerHTML = company.innerHTML.replace(
+      re,
+      (match) => `<mark>${match}</mark>`
+    );
+  });
+}
 
 function createTickerItem(obj) {
   const { symbol, priceWhenPosted } = obj;
@@ -90,10 +103,10 @@ function createCompany(company) {
 
   const a = document.createElement("a");
   a.setAttribute("class", "company");
-  a.innerHTML = `${companyName} (${symbol})`;
   a.setAttribute("id", symbol);
   a.setAttribute("href", `/company/index.html?symbol=${symbol}`);
   a.setAttribute("target", "_blank");
+  a.innerHTML = `${companyName} (${symbol})`;
   a.style.alignSelf = "center";
   companyContainer.appendChild(a);
 
