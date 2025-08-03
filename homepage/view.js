@@ -1,5 +1,5 @@
 import * as makeUrl from "../utils/makeUrl.js";
-import getData from "../utils/getData.js";
+import * as apiStorage from "../utils/apiStorage.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const startButton = document.getElementById("start-button");
@@ -9,9 +9,24 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchButton = document.getElementById("search-button");
   const loading = document.getElementById("loading");
 
-  startButton.addEventListener("click", () => {
+  startButton.addEventListener("click", async () => {
     startButton.style.display = "none";
     searchContainer.style.display = "initial";
+    const listUrl = makeUrl.listUrl();
+
+    const marqueeData = apiStorage
+      .getFilteredData(listUrl)
+      .filter((obj) => obj.exchangeShortName === "NASDAQ")
+      .slice(30)
+      .forEach((element) => {});
+    const first = document.getElementById("first");
+    first.innerHTML = marqueeData
+      .slice(0, Math.ceil(marqueeData.length / 2))
+      .join(" ");
+    const second = document.getElementById("second");
+    second.innerHTML = marqueeData
+      .slice(Math.ceil(marqueeData.length / 2))
+      .join(" ");
   });
 
   searchButton.addEventListener("click", async () => {
@@ -19,11 +34,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const url = makeUrl.searchURL(query);
 
     loading.style.display = "initial";
-    const data = await getData(url);
+    const data = await apiStorage.getData(url);
     loading.style.display = "none";
 
     const promises = data.map((company) =>
-      getData(makeUrl.companyUrl(company.symbol))
+      apiStorage.getData(makeUrl.companyUrl(company.symbol))
     );
     const companies = await Promise.all(promises);
     render(companies);

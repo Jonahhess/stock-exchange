@@ -1,5 +1,5 @@
 import * as makeUrl from "../utils/makeUrl.js";
-import getData from "../utils/getData.js";
+import * as apiStorage from "../utils/apiStorage.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   const urlParams = new URLSearchParams(window.location.search);
@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const loadingCompanyData = document.getElementById("loading-company-data");
   loadingCompanyData.style.display = "initial";
   const url = makeUrl.companyUrl(symbol);
-  const data = await getData(url);
+  const data = await apiStorage.getData(url);
   loadingCompanyData.style.display = "none";
   render(data[0]);
 
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   );
   loadingHistoricalData.style.display = "initial";
   const history = makeUrl.historyUrl(symbol);
-  const historicalData = await getData(history);
+  const historicalData = await apiStorage.getData(history);
   loadingHistoricalData.style.display = "none";
   renderHistoricalData(historicalData);
 });
