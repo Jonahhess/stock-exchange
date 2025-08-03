@@ -28,6 +28,6 @@ export const historyUrl = (symbol) => {
   const baseUrl =
     "https://financialmodelingprep.com/api/v3/historical-price-full";
 
-  const url = `${baseUrl}/${symbol}&apikey=${apikey}`;
+  const url = `${baseUrl}/${symbol}?serieType=line&apikey=${apikey}`;
   return url;
 };
