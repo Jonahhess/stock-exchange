@@ -17,14 +17,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const listUrl = makeUrl.listUrl();
 
     const marqueeContent = document.getElementById("marquee-content");
-    const filteredData = await apiStorage.getFilteredData(listUrl, [
-      Array.prototype.filter((obj) => obj.exchangeShortName === "NASDAQ"),
-      Array.prototype.slice(30),
-    ]);
+    const data = await apiStorage.getData(listUrl);
+    data.forEach((obj) => {
+      marqueeContent.appendChild(createTickerItem(obj));
+    });
+    data.forEach((obj) => {
+      marqueeContent.appendChild(createTickerItem(obj));
+    });
+    data.forEach((obj) => {
+      marqueeContent.appendChild(createTickerItem(obj));
+    });
 
-    filteredData.forEach((obj) =>
-      marqueeContent.appendChild(createTickerItem(obj))
-    );
     marqueeLoading.style.display = "none";
   });
 
@@ -48,25 +51,21 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function createTickerItem(obj) {
-  const { symbol, changePercentage } = obj;
+  const { symbol, priceWhenPosted } = obj;
   const li = document.createElement("li");
   li.setAttribute("id", symbol);
-  li.setAttribute("class, ticker-item");
+  li.setAttribute("class", "ticker-item");
 
   const p = document.createElement("p");
   p.setAttribute("id", symbol);
   p.innerHTML = symbol;
+  p.style.paddingRight = "10px";
   li.appendChild(p);
 
   const change = document.createElement("p");
-  change.setAttribute("id", `${symbol}-change-percentage`);
-  change.innerHTML = changePercentage;
-  change.style.color =
-    changePercentage > 0
-      ? "light-green"
-      : changePercentage < 0
-      ? "red"
-      : "black";
+  change.setAttribute("id", `${symbol}-price`);
+  change.innerHTML = priceWhenPosted;
+  change.style.color = "green";
   li.appendChild(change);
   return li;
 }
