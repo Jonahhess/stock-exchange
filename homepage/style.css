@@ -11,8 +11,8 @@
   height: 30px;
 
   position: absolute;
-  animation: marquee 20s linear infinite;
-  top: 100%;
+  animation: marquee 40s linear infinite;
+  top: -100%;
 }
 
 ul > li {
