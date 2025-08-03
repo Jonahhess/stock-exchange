@@ -55,7 +55,7 @@ function highlight(query) {
   const companies = document.getElementsByClassName("company");
   const escapedPattern = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   const re = new RegExp(escapedPattern, "gi");
-  companies.forEach((company) => {
+  Array.from(companies).forEach((company) => {
     company.innerHTML = company.innerHTML.replace(
       re,
       (match) => `<mark>${match}</mark>`
