@@ -31,3 +31,10 @@ export const historyUrl = (symbol) => {
   const url = `${baseUrl}/${symbol}?serieType=line&apikey=${apikey}`;
   return url;
 };
+
+export const listUrl = () => {
+  const baseUrl = "https://financialmodelingprep.com/api/v3/stock/list";
+
+  const url = `${baseUrl}?apikey=${apikey}`;
+  return url;
+};
