@@ -1,20 +1,23 @@
 .marquee {
-  height: 20px;
-  width: 420px;
+  height: 30px;
+  width: 100%;
 
-  overflow: hidden;
   position: relative;
 }
 
-.marquee div {
-  display: block;
+.marquee ul {
+  display: flex;
   width: 200%;
   height: 30px;
 
   position: absolute;
-  overflow: hidden;
+  animation: marquee 20s linear infinite;
+  top: 100%;
+}
 
-  animation: marquee 10s linear infinite;
+ul > li {
+  display: flex;
+  padding-right: 10px;
 }
 
 @keyframes marquee {
