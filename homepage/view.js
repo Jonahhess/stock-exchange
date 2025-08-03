@@ -1,5 +1,5 @@
-import * as update from "../update.js";
 import * as makeUrl from "../utils/makeUrl.js";
+import getData from "../utils/getData.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const startButton = document.getElementById("start-button");
@@ -10,50 +10,65 @@ document.addEventListener("DOMContentLoaded", () => {
   const loading = document.getElementById("loading");
 
   startButton.addEventListener("click", () => {
-    update.init();
     startButton.style.display = "none";
     searchContainer.style.display = "initial";
   });
 
-  searchButton.addEventListener("click", () => {
-    loading.style.display = "initial";
-
+  searchButton.addEventListener("click", async () => {
     const query = searchInput.value;
     const url = makeUrl.searchURL(query);
 
-    update
-      .search(url)
-      .then((model) => render(model))
-      .catch((error) => {
-        console.error(error);
-        loading.style.display = "none";
-      });
+    loading.style.display = "initial";
+    const data = await getData(url);
+    loading.style.display = "none";
+
+    const promises = data.map((company) =>
+      getData(makeUrl.companyUrl(company.symbol))
+    );
+    const companies = await Promise.all(promises);
+    render(companies);
 
     searchInput.value = "";
   });
 });
 
-function createStock(stock) {
-  const stockContainer = document.createElement("div");
-  stockContainer.setAttribute("class", "stock-container");
+function createCompany(company) {
+  const { image, companyName, symbol, changePercentage } = company;
+
+  const companyContainer = document.createElement("div");
+  companyContainer.setAttribute("class", "company-container");
+  companyContainer.style.display = "flex";
+
+  const imageContainer = document.createElement("div");
+  imageContainer.setAttribute("id", `${symbol}-image-container`);
+
+  const img = document.createElement("img");
+  img.setAttribute("id", `${symbol}-image`);
+  img.setAttribute("src", image);
+  img.style.height = "30px";
+  img.style.paddingRight = "20px";
+  imageContainer.appendChild(img);
+  companyContainer.appendChild(imageContainer);
 
   const a = document.createElement("a");
-  a.setAttribute("class", "stock");
-  a.innerHTML = `${stock.name} (${stock.symbol})`;
-  a.setAttribute("id", stock.symbol);
-  a.setAttribute("href", `/company/index.html?symbol=${stock.symbol}`);
+  a.setAttribute("class", "company");
+  a.innerHTML = `${companyName} (${symbol})`;
+  a.setAttribute("id", symbol);
+  a.setAttribute("href", `/company/index.html?symbol=${symbol}`);
   a.setAttribute("target", "_blank");
+  a.style.alignSelf = "center";
+  companyContainer.appendChild(a);
 
-  stockContainer.appendChild(a);
-  return stockContainer;
+  const change = document.createElement("p");
+  change.setAttribute("id", `${symbol}-change-percentage`);
+  change.innerHTML = changePercentage;
+  return companyContainer;
 }
 
-const render = (model) => {
-  loading.style.display = "none";
+const render = (companies) => {
   const searchResults = document.getElementById("search-results");
   searchResults.innerHTML = "";
-  const stocks = model.stocks;
-  stocks.forEach((stock) => {
-    searchResults.appendChild(createStock(stock));
+  companies.forEach((company) => {
+    searchResults.appendChild(createCompany(company[0]));
   });
 };
