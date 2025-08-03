@@ -1,5 +1,5 @@
 import model from "./model.js";
-import getData from "./getData.js";
+import getData from "./utils/getData.js";
 
 export const init = () => {
   return model;

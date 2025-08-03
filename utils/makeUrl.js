@@ -20,5 +20,6 @@ export const searchURL = (
 export const companyUrl = (symbol) => {
   const baseUrl = "https://financialmodelingprep.com/stable/profile";
 
-  return `${baseUrl}?symbol=${symbol}&apikey=${apikey}`;
+  const url = `${baseUrl}?symbol=${symbol}&apikey=${apikey}`;
+  return url;
 };

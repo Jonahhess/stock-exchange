@@ -1,5 +1,5 @@
-import * as update from "./update.js";
-import * as makeUrl from "./makeUrl.js";
+import * as update from "../update.js";
+import * as makeUrl from "../utils/makeUrl.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const startButton = document.getElementById("start-button");
@@ -41,7 +41,7 @@ function createStock(stock) {
   a.setAttribute("class", "stock");
   a.innerHTML = `${stock.name} (${stock.symbol})`;
   a.setAttribute("id", stock.symbol);
-  a.setAttribute("href", `/company.html?symbol=${stock.symbol}`);
+  a.setAttribute("href", `/company/index.html?symbol=${stock.symbol}`);
   a.setAttribute("target", "_blank");
 
   stockContainer.appendChild(a);
