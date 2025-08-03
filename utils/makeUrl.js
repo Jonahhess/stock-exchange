@@ -23,3 +23,11 @@ export const companyUrl = (symbol) => {
   const url = `${baseUrl}?symbol=${symbol}&apikey=${apikey}`;
   return url;
 };
+
+export const historyUrl = (symbol) => {
+  const baseUrl =
+    "https://financialmodelingprep.com/api/v3/historical-price-full";
+
+  const url = `${baseUrl}/${symbol}&apikey=${apikey}`;
+  return url;
+};
