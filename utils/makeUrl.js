@@ -32,9 +32,12 @@ export const historyUrl = (symbol) => {
   return url;
 };
 
-export const listUrl = () => {
-  const baseUrl = "https://financialmodelingprep.com/api/v3/stock/list";
+export const listUrl = (params = { page: 0, limit: 10 }) => {
+  const baseUrl = "https://financialmodelingprep.com/stable/grades-latest-news";
+  const paramsString = Object.entries(params)
+    .map(([k, v]) => `${k}=${v}&`)
+    .join("");
 
-  const url = `${baseUrl}?apikey=${apikey}`;
+  const url = `${baseUrl}?${paramsString}apikey=${apikey}`;
   return url;
 };
