@@ -7,31 +7,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const searchInput = document.getElementById("search-input");
   const searchButton = document.getElementById("search-button");
-  const loading = document.getElementById("loading");
 
   startButton.addEventListener("click", async () => {
     startButton.style.display = "none";
     searchContainer.style.display = "initial";
+
+    const marqueeLoading = document.getElementById("marquee-loading");
+    marqueeLoading.style.display = "initial";
     const listUrl = makeUrl.listUrl();
 
-    const marqueeData = apiStorage
-      .getFilteredData(listUrl)
-      .filter((obj) => obj.exchangeShortName === "NASDAQ")
-      .slice(30)
-      .forEach((element) => {});
-    const first = document.getElementById("first");
-    first.innerHTML = marqueeData
-      .slice(0, Math.ceil(marqueeData.length / 2))
-      .join(" ");
-    const second = document.getElementById("second");
-    second.innerHTML = marqueeData
-      .slice(Math.ceil(marqueeData.length / 2))
-      .join(" ");
+    const marqueeContent = document.getElementById("marquee-content");
+    const filteredData = await apiStorage.getFilteredData(listUrl, [
+      Array.prototype.filter((obj) => obj.exchangeShortName === "NASDAQ"),
+      Array.prototype.slice(30),
+    ]);
+
+    filteredData.forEach((obj) =>
+      marqueeContent.appendChild(createTickerItem(obj))
+    );
+    marqueeLoading.style.display = "none";
   });
 
   searchButton.addEventListener("click", async () => {
     const query = searchInput.value;
     const url = makeUrl.searchURL(query);
+    const loading = document.getElementById("loading");
 
     loading.style.display = "initial";
     const data = await apiStorage.getData(url);
@@ -46,6 +46,30 @@ document.addEventListener("DOMContentLoaded", () => {
     searchInput.value = "";
   });
 });
+
+function createTickerItem(obj) {
+  const { symbol, changePercentage } = obj;
+  const li = document.createElement("li");
+  li.setAttribute("id", symbol);
+  li.setAttribute("class, ticker-item");
+
+  const p = document.createElement("p");
+  p.setAttribute("id", symbol);
+  p.innerHTML = symbol;
+  li.appendChild(p);
+
+  const change = document.createElement("p");
+  change.setAttribute("id", `${symbol}-change-percentage`);
+  change.innerHTML = changePercentage;
+  change.style.color =
+    changePercentage > 0
+      ? "light-green"
+      : changePercentage < 0
+      ? "red"
+      : "black";
+  li.appendChild(change);
+  return li;
+}
 
 function createCompany(company) {
   const { image, companyName, symbol, changePercentage } = company;
