@@ -1,0 +1,22 @@
+#title-row {
+  display: flex;
+  justify-content: flex-start;
+}
+
+#image-container {
+  padding-right: 20px;
+}
+
+#price-change {
+  display: flex;
+  justify-content: space-around;
+}
+
+#company-data-container {
+  width: 700px;
+  margin: 0 auto;
+  background-color: whitesmoke;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 3px;
+}
